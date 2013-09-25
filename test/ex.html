@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Untitled Document</title>
+<script src="jquery-1.4.2.min.js"></script>
+<script src="jquery1.9.1.js"></script>
+<script src="jquery.rss"></script>
+    <script>
+      jQuery(function($) {
+        $("#list").rss("http://feeds.bbci.co.uk/news/rss.xml", {
+          limit: 20,
+          effect: 'slideFastSynced'
+        })
+      })
+    </script>
+<script>
+	(function ($) {
+	  jQuery.expr[':'].Contains = function(a,i,m){
+		  return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase())>=0;
+	  };
+
+	  function listFilter(header, list) {
+		var form = $("<form>").attr({"class":"filterform","action":"#"}),
+			input = $("<input>").attr({"class":"filterinput","type":"text","placeholder":"Keyword"});
+		$(form).append(input).appendTo(header);
+
+		$(input)
+		  .change( function () {
+			var filter = $(this).val();
+			if(filter) {
+			  $(list).find("a:not(:Contains(" + filter + "))").parent().slideUp();
+			  $(list).find("a:Contains(" + filter + ")").parent().slideDown();
+			} else {
+			  $(list).find("li").slideDown();
+			}
+			return false;
+		  })
+		.keyup( function () {
+			$(this).change();
+		});
+	  }
+
+	  $(function () {
+		listFilter($("#header"), $("#list"));
+	  });
+	}(jQuery));
+</script> 
+
+</head>
+
+<body>
+<div id="wrap">
+    <h1 id="header">DVD Collection</h1>
+    <ul id="list">
+        <li><a href="#">Batman</a></li>
+        <li><a href="#">Ice Age</a></li>
+        <li><a href="#">Star Trek (2009)</a></li>
+        <li><a href="#">Tremors</a></li>
+    </ul>
+</div> 
+<div id ="rss-feeds" class="news"></div>
+</body>
+</html>
